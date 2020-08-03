@@ -13,12 +13,12 @@
 
 WiFiClient espClient;
 bool shouldSaveConfig = false;      //Used for WIFI Manager callback to save parameters
-char config_name[40] ="Rho2";         //WIFI config: Bonjour name of device
+char config_name[40] ="";         //WIFI config: Bonjour name of device
 String wifi_APid = "Roller Shade Configuration";    //Name of wifi access point
 String config_name_string;
 
 PubSubClient psclient(espClient);      //MQTT client
-char mqtt_server[40]="192.168.2.100";  //WIFI config: MQTT server config (optional)
+char mqtt_server[40]="";  //WIFI config: MQTT server config (optional)
 char mqtt_port[6] = "1883";            //WIFI config: MQTT port config (optional)
 char mqtt_uid[20];                     //WIFI config: MQTT server username (optional)
 char mqtt_pwd[20];                     //WIFI config: MQTT server password (optional)
