@@ -4,6 +4,7 @@ void processMsgStepper1(String res){
 
   if (res == "(start)") {
     //Store the current position as the start position
+    currentPosition1 = 0;
     InitializeMotor1();
     saveItNow = true;
     
@@ -53,6 +54,7 @@ void processMsgStepper1(String res){
 void processMsgStepper2(String res){
   if (res == "(start)") {
     //Store the current position as the start position
+    currentPosition2 = 0;
     InitializeMotor2();
     saveItNow = true;
     
