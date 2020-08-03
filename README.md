@@ -11,6 +11,7 @@ This project has the following functionalities:
 - Configuration saved on power loss
 - Full webpage support for the dual motors, temperature and humidity
 - OTA support
+- Wipe Settings function
 
 # Hardware Wiring
 I use a ESP8266 Wemos D1 mini for this project. It has less avalaible pins than other ESP8266 or ESP32 chips. To be able to use dual motors and BME280 chip I did reconfigure the TX and RX pins, this means the chip will not have serial capabilities, hence you will not be able to do serial monitor to it. While you test I suggest you set to false the useBME280Sensor variable so you can use the serial monitor.

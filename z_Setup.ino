@@ -73,6 +73,7 @@ void StartWebPage(){
 
   //Serve the webpage
   server.on("/", handleRoot);
+  server.on("/reset", handleResetSettings);
   if(useBME280Sensor && send_temperature){
     server.on("/readTemp", handleTemp);
   }

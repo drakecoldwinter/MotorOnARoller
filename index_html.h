@@ -174,6 +174,17 @@ function getHumData() {
       websocket.send(motor + '|' + msg);
     }
   };
+
+  function wipeSettings() {
+    if (confirm("Are you really sure to wipe ALL settings?")) {
+      $.ajax({
+        type: "POST",
+        url: "/reset",
+        contentType : 'application/json',
+      })
+    }
+  }
+  
   window.addEventListener('load', init, false);
   window.onbeforeunload = function() {
     if (websocket && websocket.readyState == 1){
@@ -197,6 +208,9 @@ function getHumData() {
         <ons-list-item onclick='fn.load("about.html")' tappable>
           About
         </ons-list-item>
+        <ons-list-item onclick='wipeSettings()' tappable>
+          Wipe settings
+        </ons-list-item>
       </ons-list>
     </ons-page>
   </ons-splitter-side>
@@ -212,7 +226,7 @@ function getHumData() {
         </ons-toolbar-button>
       </div>
       <div class='center'>
-        Rho2
+        {NAME}
       </div>
       <div class='right' id='bme280' style='display:none'>
         <ons-icon icon='fa-thermometer-half' >&nbsp;</ons-icon><span id='temperature'>0 C</span>&nbsp;&nbsp;

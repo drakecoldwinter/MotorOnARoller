@@ -108,8 +108,6 @@ void CoverConfig(String config_name_string, String cover_letter){
       configString += "\"json_attr_tpl\":\"{{value_json.position|tojson}}\", ";
       configString += "\"pl_open\":\"0\", ";
       configString += "\"pl_cls\":\"100\", ";
-      //configString += "\"pos_open\":100, ";
-      //configString += "\"pos_clsd\":0, ";
       configString += "\"val_tpl\":\"{{value_json.position}}\"";
       configString += "}";
 

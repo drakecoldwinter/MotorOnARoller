@@ -73,6 +73,16 @@ void StartWifi(){
 
 
 
+//Takes care of resetting the ESP and Wifi Settings
+void handleResetSettings() {
+  
+  WiFiManager wifiManager;
+  //resets wifi parameters
+  wifiManager.resetSettings();
+  //resets the esp8266 config file
+  SPIFFS.format();
+}
+
 
 /*
    Callback from WIFI Manager for saving configuration
