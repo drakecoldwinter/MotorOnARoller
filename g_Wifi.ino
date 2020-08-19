@@ -29,11 +29,6 @@ void StartWifi(){
   //Setup WIFI Manager
   WiFiManager wifiManager;
 
-  //resets wifi parameters
-  //wifiManager.resetSettings();
-  //resets the esp8266 config file
-  //SPIFFS.format();
-
   wifiManager.setSaveConfigCallback(saveConfigCallback);
   //add all your parameters here
   wifiManager.addParameter(&custom_config_name);

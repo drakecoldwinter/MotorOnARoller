@@ -96,7 +96,7 @@ void SendMsg(String topic, String payload, bool retained) {
 //Prepares the config for the cover
 void CoverConfig(String config_name_string, String cover_letter){
    
-      String configString = "{\"dev_cla\":\"shade\", \"name\":\"" + config_name_string + cover_letter + "_cover\", ";
+      String configString = "{\"dev_cla\":\"shade\", \"name\":\"" + String(config_name) + cover_letter + " Cover\", ";
       configString += "\"uniq_id\":\"" + config_name_string + cover_letter + "_cover\", ";
       configString += DeviceConfig(config_name_string);
       configString += "\"avty_t\":\"" + availability_topic + "\", ";
@@ -127,7 +127,7 @@ void CoverConfig(String config_name_string, String cover_letter){
 //Prepares the config for the temperature sensor
 void TemperatureConfig(String config_name_string){
   if(useBME280Sensor && send_temperature){
-      String configString = "{\"dev_cla\":\"temperature\", \"name\":\"" + config_name_string + "_temperature\", ";
+      String configString = "{\"dev_cla\":\"temperature\", \"name\":\"" + String(config_name) + " Temperature\", ";
       configString += "\"uniq_id\":\"" + config_name_string + "_temperature\", ";
       configString += DeviceConfig(config_name_string);
       configString += "\"avty_t\":\"" + availability_topic + "\", ";
@@ -145,7 +145,7 @@ void TemperatureConfig(String config_name_string){
 //Prepares the config for the humidity sensor
 void HumidityConfig(String config_name_string){
   if (useBME280Sensor && send_humidity){
-      String configString = "{\"dev_cla\":\"humidity\", \"name\":\"" + config_name_string + "_humidity\", ";
+      String configString = "{\"dev_cla\":\"humidity\", \"name\":\"" + String(config_name) + " Humidity\", ";
       configString += "\"uniq_id\":\"" + config_name_string + "_humidity\", ";
       configString += DeviceConfig(config_name_string);
       configString += "\"avty_t\":\"" + availability_topic + "\", ";
@@ -163,7 +163,7 @@ void HumidityConfig(String config_name_string){
 //Prepares the config for the connectivity sensor
 void ConnectivityConfig(String config_name_string){
   
-      String configString = "{\"dev_cla\":\"connectivity\", \"name\":\"" + config_name_string + "_status\", ";
+      String configString = "{\"dev_cla\":\"connectivity\", \"name\":\"" + String(config_name) + " Status\", ";
       configString += "\"uniq_id\":\"" + config_name_string + "_status\", ";
       configString += DeviceConfig(config_name_string);
       configString += "\"~\":\"homeassistant/binary_sensor/connectivity/" + config_name_string + "\", ";

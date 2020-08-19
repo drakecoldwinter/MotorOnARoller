@@ -1,5 +1,5 @@
 # MotorOnARoller
- This is my implementation of Motor on a Roller from [nidayand](https://github.com/nidayand/motor-on-roller-blind-ws) and [thehookup](https://github.com/thehookup/motor-on-roller-blind-ws). I rewrote most of the code as a mean to teach myself arduino, so that this code is split among many files defining what's on each file. I also took the oportunity to add some functionalities. As for the motor I implemented the AccelStepper library wich is very impressive and modified the code to use 1 or 2 motors deppending on your needs. The webpage will dynamically change depending if you activated dual motors and if you used a BME280 or a BMP280 sensor. The BME280 is sampled once each 2 minutes, so upon booting the information may not be avalaible.
+ This is my implementation of Motor on a Roller from [nidayand](https://github.com/nidayand/motor-on-roller-blind-ws) and [thehookup](https://github.com/thehookup/motor-on-roller-blind-ws). I rewrote most of the code as a mean to teach myself arduino, so that this code is split among many files defining what's on each file. I also took the oportunity to add some functionalities. As for the steppers I modified the code to use 1 or 2 motors deppending on your needs. The webpage will dynamically change depending if you activated dual motors and if you used a BME280 or a BMP280 sensor. The BME280 is sampled once each 2 minutes, so upon booting the information may not be avalaible. Also all the configuration is avalaible on the settings page, so no need to completely reset the device, althrough you can if you wish.
  
 <img src="https://github.com/drakecoldwinter/MotorOnARoller/blob/master/images/main_screen.png" width="500">
 
@@ -8,8 +8,7 @@ This project has the following functionalities:
 - BME280 and BMP280 chip support
 - Automatic detection and configuration under home assistant (using [MQTT discovery](https://www.home-assistant.io/docs/mqtt/discovery/))
 - WebSocket and MQTT support
-- Configuration saved on power loss
-- Full webpage support for the dual motors, temperature and humidity
+- Full webpage support for the dual motors, temperature, humidity and configuration
 - OTA support
 - Wipe Settings function
 
@@ -26,6 +25,13 @@ Also you need to use a 9V power supply for the motors, I suggest you use a 7805 
 Upon starting a complete hierachy will be created on MQTT. If you have activated MQTT discovery on home assistant, then you don't need to do anything else, under devices you should see the ESP appear and the covers as well as the sensors will be avalaible. I also implemented a network status sensor that will render all sensors unavalaible (using Last Will on MQTT) if the connection to the ESP is lost. The main purpose is that you will not need to change nor configure anything under home assistant, everything should simply work. Of course you can still use the code without home assistant with MQTT Payloads.
 
 <img src="https://github.com/drakecoldwinter/MotorOnARoller/blob/master/images/ha_screen.png" width="300">
+
+# Settings screen
+
+I have made avalaible all configuration parameters under the Settings section, this way you will be able to change some settings without the need of fully rebooting and reseting the device.
+
+<img src="https://github.com/drakecoldwinter/MotorOnARoller/blob/master/images/Settings.png" width="300">
+
 
 # Required libraries (3rd party)
 - AccelStepper: https://www.airspayce.com/mikem/arduino/AccelStepper/

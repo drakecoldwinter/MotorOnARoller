@@ -37,11 +37,15 @@ bool loadConfig() {
   
   //Store variables locally
   currentPosition1 = _config["currentPosition1"].as<long>();
+  setPos1 = currentPosition1;
   maxPosition1 = _config["maxPosition1"].as<long>();
   currentPosition2 = _config["currentPosition2"].as<long>();
+  setPos2 = currentPosition2;
   maxPosition2 = _config["maxPosition2"].as<long>();
   useBME280Sensor =_config["useBME280Sensor"].as<bool>();
   controlDualBlinds =_config["controlDualBlinds"].as<bool>();
+  ccw1 =_config["ccw1"].as<bool>();
+  ccw2 =_config["ccw2"].as<bool>();
 
   strcpy(config_name, _config["config_name"]);
   strcpy(mqtt_server, _config["mqtt_server"]);
@@ -72,6 +76,8 @@ bool saveConfig() {
   json["mqtt_pwd"] = mqtt_pwd;
   json["useBME280Sensor"] = useBME280Sensor;
   json["controlDualBlinds"] = controlDualBlinds;
+  json["ccw1"] = controlDualBlinds;
+  json["ccw2"] = controlDualBlinds;
 
   File configFile = SPIFFS.open(_configfile, "w");
   if (!configFile) {

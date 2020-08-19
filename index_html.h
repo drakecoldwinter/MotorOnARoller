@@ -13,8 +13,10 @@ String INDEX_HTML = R"(<!DOCTYPE html>
   var cversion = '{VERSION}';
   var controlDualBlinds = '{controlDualBlinds}';
   var useBME280Sensor = '{useBME280Sensor}';
+  var ccw1 = '{clockwise1}';
+  var ccw2 = '{clockwise2}';
   var wsUri = 'ws://'+location.host+':81/';
-   var repo = 'https://github.com/drakecoldwinter/MotorOnARoller';
+  var repo = 'https://github.com/drakecoldwinter/MotorOnARoller';
 
 if(useBME280Sensor==true){
   setInterval(function() {
@@ -24,24 +26,17 @@ if(useBME280Sensor==true){
     }, 1000); //1000mSeconds update rate
 }
 
-if(controlDualBlinds==true){
-  setInterval(function(){
-    $('.coverB').show();
-    $('.coverA').show();
-  },1000);
-}
-
 function getTempData() {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("temperature").innerHTML = this.responseText + ' C';
-      if(this.responseText != ""){
+      document.getElementById('temperature').innerHTML = this.responseText + ' C';
+      if(this.responseText != ''){
         $('#bme280').show();
       }     
     }
   };
-  xhttp.open("GET", "readTemp", true);
+  xhttp.open('GET', 'readTemp', true);
   xhttp.send();
 }
 
@@ -49,13 +44,13 @@ function getHumData() {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("humidity").innerHTML = this.responseText + ' %';
-      if(this.responseText != ""){
+      document.getElementById('humidity').innerHTML = this.responseText + ' %';
+      if(this.responseText != ''){
         $('#bme280').show();
       }     
     }
   };
-  xhttp.open("GET", "readHum", true);
+  xhttp.open('GET', 'readHum', true);
   xhttp.send();
 }
 
@@ -73,18 +68,16 @@ function getHumData() {
   };
 
   var gotoPos1 = function(percent){
-    doSend(percent, 1);
+    doSend(percent, '01');
   };
   var gotoPos2 = function(percent){
-    doSend(percent, 2);
+    doSend(percent, '02');
   };
   var instr = function(action, motor){
     doSend('('+action+')', motor);
   };
 
   var setActions = function(){
-    //doSend('(update)', 1);
-    //doSend('(update)', 2);
     $.get(repo+'/releases', function(data){
       if (data.length>0 && data[0].tag_name !== cversion){
         $('#cversion').text(cversion);
@@ -102,17 +95,35 @@ function getHumData() {
       $('#arrow-open2').on('click', function(){$('#setrange2').val(0);gotoPos2(0);});
       $('#setrange2').on('change', function(){gotoPos2($('#setrange2').val())});
 
-      $('#arrow-up-man1').on('click', function(){instr('-1',1)});
-      $('#arrow-down-man1').on('click', function(){instr('1',1)});
-      $('#arrow-stop-man1').on('click', function(){instr('0',1)});
-      $('#set-start1').on('click', function(){instr('start',1)});
-      $('#set-max1').on('click', function(){instr('max',1);});
+      $('#arrow-up-man1').on('click', function(){instr('-1','01')});
+      $('#arrow-down-man1').on('click', function(){instr('1','01')});
+      $('#arrow-stop-man1').on('click', function(){instr('0','01')});
+      $('#set-start1').on('click', function(){instr('start','01')});
+      $('#set-max1').on('click', function(){instr('max','01');});
 
-      $('#arrow-up-man2').on('click', function(){instr('-1',2)});
-      $('#arrow-down-man2').on('click', function(){instr('1',2)});
-      $('#arrow-stop-man2').on('click', function(){instr('0',2)});
-      $('#set-start2').on('click', function(){instr('start',2)});
-      $('#set-max2').on('click', function(){instr('max',2);});
+      $('#arrow-up-man2').on('click', function(){instr('-1','02')});
+      $('#arrow-down-man2').on('click', function(){instr('1','02')});
+      $('#arrow-stop-man2').on('click', function(){instr('0','02')});
+      $('#set-start2').on('click', function(){instr('start','02')});
+      $('#set-max2').on('click', function(){instr('max','02');});
+
+      if(controlDualBlinds==true){
+        $('.coverB').show();
+        $('.coverA').show();
+        $('#dualCoverCheckBox').prop("checked", true);
+      }
+
+      if(useBME280Sensor==true){
+        $('#BME280CheckBox').prop("checked", true);
+      }
+
+      if(ccw1==true){
+        $('#clockWiseRotationA').prop("checked", true);
+      }
+
+      if(ccw2==true){
+        $('#clockWiseRotationB').prop("checked", true);
+      }
 
     }, 200);
   };
@@ -138,8 +149,8 @@ function getHumData() {
       };
       websocket.onopen = function(evt) {
         ons.notification.toast({message: 'Connected to device', timeout: 2000});
-        setTimeout(function(){doSend('(update)',1);}, 1000);
-        setTimeout(function(){doSend('(update)',2);}, 1000);
+        setTimeout(function(){doSend('(update)','01');}, 1000);
+        setTimeout(function(){doSend('(update)','02');}, 1000);
       };
       websocket.onclose = function(evt) {
         ons.notification.toast({message: 'Disconnected. Retrying', timeout: 2000});
@@ -176,13 +187,22 @@ function getHumData() {
   };
 
   function wipeSettings() {
-    if (confirm("Are you really sure to wipe ALL settings?")) {
-      $.ajax({
-        type: "POST",
-        url: "/reset",
-        contentType : 'application/json',
-      })
+    if (confirm('Are you really sure to wipe ALL settings?')) {
+      $.ajax({ type: 'POST', url: '/reset'});
     }
+  }
+
+  function SaveAndReboot(){
+    doSend($('#dualCoverCheckBox').is(':checked'), '05');
+    doSend($('#BME280CheckBox').is(':checked'), '06');
+    doSend($('#deviceName').val(), '07');
+    doSend($('#MQTTserver').val(), '08');
+    doSend($('#MQTTport').val(), '09');
+    doSend($('#MQTTpassword').val(), '10');
+    doSend($('#MQTTusername').val(), '11');
+  
+    $.ajax({ type: 'POST', url: '/saveReboot',
+    success: function(data) { setTimeout(function(){ location.reload(); }, 1000); } });
   }
   
   window.addEventListener('load', init, false);
@@ -320,6 +340,9 @@ function getHumData() {
   <ons-card>
     <div class='title'>Control <span class='coverA' style='display:none'>(Cover A)</span></div>
     <ons-row style='width:100%'>
+      <ons-col style='text-align:left'><input type='checkbox' onclick='doSend(this.checked, "03")' id='clockWiseRotationA' />Clockwise rotation</ons-col>
+    </ons-row>
+    <ons-row style='width:100%'> 
       <ons-col style='text-align:center'><ons-icon id='arrow-up-man1' icon='fa-arrow-up' size='2x'></ons-icon></ons-col>
       <ons-col style='text-align:center'><ons-icon id='arrow-stop-man1' icon='fa-stop' size='2x'></ons-icon></ons-col>
       <ons-col style='text-align:center'><ons-icon id='arrow-down-man1' icon='fa-arrow-down' size='2x'></ons-icon></ons-col>
@@ -337,6 +360,9 @@ function getHumData() {
   <ons-card class='coverB' style='display:none'>
     <div class='title'>Control (Cover B)</div>
     <ons-row style='width:100%'>
+      <ons-col style='text-align:left'><input type='checkbox' onclick='doSend(this.checked, "04")' id='clockWiseRotationB' />Clockwise rotation</ons-col>
+    </ons-row>
+    <ons-row style='width:100%'>
       <ons-col style='text-align:center'><ons-icon id='arrow-up-man2' icon='fa-arrow-up' size='2x'></ons-icon></ons-col>
       <ons-col style='text-align:center'><ons-icon id='arrow-stop-man2' icon='fa-stop' size='2x'></ons-icon></ons-col>
       <ons-col style='text-align:center'><ons-icon id='arrow-down-man2' icon='fa-arrow-down' size='2x'></ons-icon></ons-col>
@@ -349,6 +375,25 @@ function getHumData() {
       <ons-col style='text-align:center'><ons-button id='set-max2'>Set Max</ons-button></ons-col>
     </ons-row>
   </ons-card>
+
+  <ons-card>
+    <div class='title'>Configuration Settings</div>
+    <div class='content'>
+    <p><ol>
+      Device Name <input type='textbox' id='deviceName' value='{config_name}'><br />
+      MQTT server <input type='textbox' id='MQTTserver' value='{mqtt_server}'><br />
+      MQTT port <input type='textbox' id='MQTTport' value='{mqtt_port}'><br />
+      MQTT username <input type='textbox' id='MQTTusername' value='{mqtt_uid}'><br />
+      MQTT password <input type='textbox' id='MQTTpassword' value='{mqtt_pwd}'><br />
+      <input type='checkbox' id='dualCoverCheckBox' /> Use dual covers <br />
+      <input type='checkbox' id='BME280CheckBox' /> Use BME280 or BMP280 <br />
+
+      <br />
+      <ons-button onclick='SaveAndReboot()'>Save and Reboot</ons-button>
+    </ol></p>
+  </div>
+  </ons-card>
+  
   </ons-page>
 </template>
 

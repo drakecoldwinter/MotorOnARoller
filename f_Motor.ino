@@ -5,16 +5,20 @@ void processMsgStepper1(String res){
   if (res == "(start)") {
     //Store the current position as the start position
     currentPosition1 = 0;
-    InitializeMotor1();
+    setPos1=0;
+    path1 = 0;
     saveItNow = true;
     
   } else if (res == "(max)") {
     //Store the max position of a closed blind
-    maxPosition1 = stepper1.currentPosition();
+    path1 = 0;
+    maxPosition1 = currentPosition1;
+    setPos1 = maxPosition1;
     saveItNow = true;
     
   }else if (res == "(update)") {
     //Send position details to client
+    path1 = 0;
     UpdateClientStepper1();
     
   } else if (res == "(ping)") {
@@ -22,30 +26,21 @@ void processMsgStepper1(String res){
     
   }else if (res == "(0)" || res =="STOP") {
     //Stop button pressed
-    stepper1.stop();
-    setPos1 = maxPosition1 * stepper1.currentPosition() / 100;
+    path1 = 0;
+    setPos1 = currentPosition1;
     UpdateClientStepper1();
-    action="";
-    
+  
   } else if (res == "(1)") {
     //Move down without limit to max position
-    stepper1.setAcceleration(500);
-    stepper1.moveTo(100000000);
-    action="settings";
+    path1 = 1;
     
   } else if (res == "(-1)") {
     //Move up without limit to top position
-    stepper1.setAcceleration(500);
-    stepper1.moveTo(-100000000);
-    action="settings";
+    path1= -1;
     
   } else {  
-    if (action=="settings"){
-      action="";
-      InitializeMotor1();
-    }
+    path1 = 0;
     setPos1 = maxPosition1 * res.toInt() / 100;
-    stepper1.moveTo(setPos1);
     UpdateClientStepper1();
   }
 }
@@ -55,16 +50,20 @@ void processMsgStepper2(String res){
   if (res == "(start)") {
     //Store the current position as the start position
     currentPosition2 = 0;
-    InitializeMotor2();
+    path2 = 0;
+    setPos2=0;
     saveItNow = true;
     
   } else if (res == "(max)") {
     //Store the max position of a closed blind
-    maxPosition2 = stepper2.currentPosition();
+    maxPosition2 = currentPosition2;
+    setPos2=maxPosition2;
+    path2 = 0;
     saveItNow = true;
     
   }else if (res == "(update)") {
     //Send position details to client
+    path2 = 0;
     UpdateClientStepper2();
     
   } else if (res == "(ping)") {
@@ -72,52 +71,23 @@ void processMsgStepper2(String res){
     
   }else if (res == "(0)" || res =="STOP") {
     //Stop button pressed
-    stepper2.stop();
-    setPos2 = maxPosition2 * stepper2.currentPosition() / 100;
+    setPos2 = currentPosition2;
     UpdateClientStepper2();
-    action="";
+    path2 = 0;
     
   } else if (res == "(1)") {
     //Move down without limit to max position
-    stepper2.setAcceleration(500);
-    stepper2.moveTo(100000000);
-    action="settings";
+    path2 = 1;
     
   } else if (res == "(-1)") {
     //Move up without limit to top position
-    stepper2.setAcceleration(500);
-    stepper2.moveTo(-100000000);
-    action="settings";
+    path2 = -1;
     
   } else {  
-    if (action=="settings"){
-      action="";
-      InitializeMotor2();
-    }
+    path2 = 0;
     setPos2 = maxPosition2 * res.toInt() / 100;
-    stepper2.moveTo(setPos2);
     UpdateClientStepper2();
   }
-}
-
-
-
-//Set's the speed and acceleration of the motor
-void InitializeMotor1(){
-    stepper1.setCurrentPosition(currentPosition1);
-    setPos1 = currentPosition1;
-    stepper1.setMaxSpeed(800);
-    stepper1.setAcceleration(100);
-    UpdateClientStepper1();
-}
-
-//Set's the speed and acceleration of the motor
-void InitializeMotor2(){
-    stepper2.setCurrentPosition(currentPosition2);
-    setPos2 = currentPosition2;
-    stepper2.setMaxSpeed(800);
-    stepper2.setAcceleration(100);
-    UpdateClientStepper2();
 }
 
 //Send's the Set and the Pos to MQTT

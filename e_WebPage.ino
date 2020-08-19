@@ -14,6 +14,12 @@ void handleHum() {
  server.send(200, "text/plane", humidity); //Send temperature to client ajax request
 }
 
+//Saves and Reboot the ESP
+void handleSaveReboot(){
+  saveConfig();
+  resetFunc();
+}
+
 //If you ask for a no existing web page
 void handleNotFound() {
   String message = "File Not Found\n\n";

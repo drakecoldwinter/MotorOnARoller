@@ -18,11 +18,11 @@ void setup()
  
   StartWebPage();
 
-  InitializeMotor1();
-
-  InitializeMotor2();
-
   StartOTA();
+
+  StopPowerToCoilsStepper1();
+
+  StopPowerToCoilsStepper2();
 }
 
 
@@ -70,10 +70,19 @@ void StartWebPage(){
   INDEX_HTML.replace("{NAME}", String(config_name));
   INDEX_HTML.replace("{controlDualBlinds}", String(controlDualBlinds));
   INDEX_HTML.replace("{useBME280Sensor}", String(useBME280Sensor));
+  INDEX_HTML.replace("{clockwise1}", String(ccw1));
+  INDEX_HTML.replace("{clockwise2}", String(ccw2));
+  INDEX_HTML.replace("{config_name}", String(config_name));
+  INDEX_HTML.replace("{mqtt_server}", String(mqtt_server));
+  INDEX_HTML.replace("{mqtt_port}", String(mqtt_port));
+  INDEX_HTML.replace("{mqtt_uid}", String(mqtt_uid));
+  INDEX_HTML.replace("{mqtt_pwd}", String(mqtt_pwd));
 
   //Serve the webpage
   server.on("/", handleRoot);
   server.on("/reset", handleResetSettings);
+  server.on("/saveReboot", handleSaveReboot);
+  
   if(useBME280Sensor && send_temperature){
     server.on("/readTemp", handleTemp);
   }
