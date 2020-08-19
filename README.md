@@ -34,7 +34,7 @@ I have made avalaible all configuration parameters under the Settings section, t
 
 
 # Required libraries (3rd party)
-- AccelStepper: https://www.airspayce.com/mikem/arduino/AccelStepper/
+- Stepper_28BYJ_48: https://github.com/thomasfredericks/Stepper_28BYJ_48/
 - PubSubClient: https://github.com/knolleary/pubsubclient/
 - ArduinoJson v5: https://github.com/bblanchon/ArduinoJson
 - WIFIManager: https://github.com/tzapu/WiFiManager
