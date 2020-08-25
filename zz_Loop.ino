@@ -55,21 +55,24 @@ void RunMotors(){
     StopPowerToCoilsStepper1();
   }  
 
-  if ((currentPosition2 > setPos2 && path2==0) || path2 == -1){
-    stepper2.step(ccw2 ? -1 : 1);
-    motor2Running = true;
-    currentPosition2 = currentPosition2-1;
-    Serial.println("Motor 2 going up");
-    
-  } else if ((currentPosition2 < setPos2 && path2==0) || path2 == 1) {
-    stepper2.step(ccw2 ? 1 : -1);
-    motor2Running = true;
-    currentPosition2 = currentPosition2+1;
-    Serial.println("Motor 2 going down");
-    
-  }else{
-    StopPowerToCoilsStepper2();
-  }  
+  if(controlDualBlinds){
+     if ((currentPosition2 > setPos2 && path2==0) || path2 == -1){
+      stepper2.step(ccw2 ? -1 : 1);
+      motor2Running = true;
+      currentPosition2 = currentPosition2-1;
+      Serial.println("Motor 2 going up");
+      
+    } else if ((currentPosition2 < setPos2 && path2==0) || path2 == 1) {
+      stepper2.step(ccw2 ? 1 : -1);
+      motor2Running = true;
+      currentPosition2 = currentPosition2+1;
+      Serial.println("Motor 2 going down");
+      
+    }else{
+      StopPowerToCoilsStepper2();
+    }  
+  }
+ 
 }
 
 //Storing positioning data and turns off the power to the coils

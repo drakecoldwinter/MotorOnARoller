@@ -24,6 +24,8 @@ Also you need to use a 9V power supply for the motors, I suggest you use a 7805 
 
 Upon starting a complete hierachy will be created on MQTT. If you have activated MQTT discovery on home assistant, then you don't need to do anything else, under devices you should see the ESP appear and the covers as well as the sensors will be avalaible. I also implemented a network status sensor that will render all sensors unavalaible (using Last Will on MQTT) if the connection to the ESP is lost. The main purpose is that you will not need to change nor configure anything under home assistant, everything should simply work. Of course you can still use the code without home assistant with MQTT Payloads.
 
+If you get shadow entities (for example a single roller but you configured dual) then you must go into your MQTT server and erase the shadow entities.
+
 <img src="https://github.com/drakecoldwinter/MotorOnARoller/blob/master/images/ha_screen.png" width="300">
 
 # Settings screen

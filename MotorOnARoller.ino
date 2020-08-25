@@ -49,8 +49,8 @@ long currentPosition2 = 0;          //Current position of the motor1
 long maxPosition2 = 10000;         //Max position of the blind 1. Initial value
 bool ccw2 = true;                 //Turns counter clockwise to lower the curtain
 bool saveItNow = false;          //If true will store positions to SPIFFS
-bool motor1Running = true;       //Checks the motor status to stop it
-bool motor2Running = true;       //Checks the motor status to stop it
+bool motor1Running = false;       //Checks the motor status to stop it
+bool motor2Running = false;       //Checks the motor status to stop it
 
 //declare variables for the motor pins of stepper1
 int motorPin1 = D1;  
