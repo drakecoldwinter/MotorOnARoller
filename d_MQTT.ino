@@ -26,8 +26,8 @@ void MqttReconnect() {
 
       if(controlDualBlinds){
           //Sends both covers configs to MQTT
-          CoverConfig(config_name_string, "_a");
-          CoverConfig(config_name_string, "_b");
+          CoverConfig(config_name_string, "a");
+          CoverConfig(config_name_string, "b");
       }else{
           //Sends a single cover config to MQTT
           CoverConfig(config_name_string, "");

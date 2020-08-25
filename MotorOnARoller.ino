@@ -12,7 +12,6 @@
 #include <Wire.h>
 
 WiFiClient espClient;
-bool shouldSaveConfig = false;      //Used for WIFI Manager callback to save parameters
 char config_name[40] ="Roller";         //WIFI config: Bonjour name of device
 String wifi_APid = "Roller Shade Configuration";    //Name of wifi access point
 String config_name_string;

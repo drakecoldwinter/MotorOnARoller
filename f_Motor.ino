@@ -94,7 +94,7 @@ void processMsgStepper2(String res){
 void UpdateClientStepper1(){
     String outputTopic ="homeassistant/cover/" + String(config_name) + "/out";
     if(controlDualBlinds){
-        outputTopic ="homeassistant/cover/" + String(config_name) + "_a/out";
+        outputTopic ="homeassistant/cover/" + String(config_name) + "a/out";
     }
     int set = (setPos1 * 100) / maxPosition1;
     int pos = (currentPosition1 * 100) / maxPosition1;
@@ -105,7 +105,7 @@ void UpdateClientStepper1(){
 
 //Send's the Set and the Pos to MQTT
 void UpdateClientStepper2(){
-        String outputTopic ="homeassistant/cover/" + String(config_name) + "_b/out";
+        String outputTopic ="homeassistant/cover/" + String(config_name) + "b/out";
         int set = (setPos2 * 100) / maxPosition2;
         int pos = (currentPosition2 * 100) / maxPosition2;
         SendMsg(outputTopic, "{ \"set\":" + String(set) + ", \"position\":" + String(pos) + " }", true);
