@@ -1,11 +1,12 @@
 # MotorOnARoller
- This is my implementation of Motor on a Roller from [nidayand](https://github.com/nidayand/motor-on-roller-blind-ws) and [thehookup](https://github.com/thehookup/motor-on-roller-blind-ws). I rewrote most of the code as a mean to teach myself arduino, so that this code is split among many files defining what's on each file. I also took the oportunity to add some functionalities. As for the steppers I modified the code to use 1 or 2 motors deppending on your needs. The webpage will dynamically change depending if you activated dual motors and if you used a BME280 or a BMP280 sensor. The BME280 is sampled once each 2 minutes, so upon booting the information may not be avalaible. Also all the configuration is avalaible on the settings page, so no need to completely reset the device, althrough you can if you wish.
+ This is my implementation of Motor on a Roller from [nidayand](https://github.com/nidayand/motor-on-roller-blind-ws) and [thehookup](https://github.com/thehookup/motor-on-roller-blind-ws). I rewrote most of the code as a mean to teach myself arduino, so that this code is split among many files defining what's on each file. I also took the oportunity to add some functionalities. As for the steppers I modified the code to use 1 or 2 motors deppending on your needs. The webpage will dynamically change depending if you activated dual motors and if you use a BME280, BMP280 or DHT sensor(can only use one of them). The BME280/DHT is sampled once each 2 minutes, so upon booting the information may not be avalaible. Also all the configuration is avalaible on the settings page, so no need to completely reset the device, althrough you can if you wish.
  
 <img src="https://github.com/drakecoldwinter/MotorOnARoller/blob/master/images/main_screen.png" width="500">
 
 This project has the following functionalities:
 - Dynamic Single and Dual motor control
 - BME280 and BMP280 chip support
+- DHT support
 - Automatic detection and configuration under home assistant (using [MQTT discovery](https://www.home-assistant.io/docs/mqtt/discovery/))
 - WebSocket and MQTT support
 - Full webpage support for the dual motors, temperature, humidity and configuration
@@ -38,8 +39,9 @@ I have made avalaible all configuration parameters under the Settings section, t
 # Required libraries (3rd party)
 - Stepper_28BYJ_48: https://github.com/thomasfredericks/Stepper_28BYJ_48/
 - PubSubClient: https://github.com/knolleary/pubsubclient/
-- ArduinoJson v5: https://github.com/bblanchon/ArduinoJson
+- ArduinoJson v6: https://github.com/bblanchon/ArduinoJson
 - WIFIManager: https://github.com/tzapu/WiFiManager
 - WbSocketsServer: https://github.com/Links2004/arduinoWebSockets
 - BME280I2C : https://github.com/finitespace/BME280
+- DHT : https://github.com/adafruit/DHT-sensor-library
 
