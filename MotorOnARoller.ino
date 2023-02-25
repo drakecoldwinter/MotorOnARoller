@@ -9,11 +9,19 @@
 #include <ArduinoJson.h>
 #include "index_html.h"
 #include <BME280I2C.h>
+#include <DHT.h>
 #include <Wire.h>
 
+#define DEBUG_SERIAL_SUPPORT 0
+
+// Uncomment whatever type you're using!
+#define DHTTYPE DHT11   // DHT 11
+//#define DHTTYPE DHT22   // DHT 22  (AM2302), AM2321
+//#define DHTTYPE DHT21   // DHT 21 (AM2301)
+
 WiFiClient espClient;
-char config_name[40] ="Roller";         //WIFI config: Bonjour name of device
-String wifi_APid = "Roller Shade Configuration";    //Name of wifi access point
+char config_name[40] ="Rho1";         //WIFI config: Bonjour name of device
+String wifi_APid = "Roller Shade";    //Name of wifi access point
 String config_name_string;
 
 PubSubClient psclient(espClient);      //MQTT client
@@ -30,8 +38,8 @@ String mqtt_clientid = "ESPClient-" + String(ESP.getChipId());  //Identification
 String esp_model = "PLATFORMIO_D1_MINI";    //ESP model, used for HA config
 String esp_manufacturer = "espressif";      //ESP Manufacturer, used for HA config
 
-String _configfile = "/config.json";       //Configuration file
-String version = "1.0.0";        // Version number for checking if there are new code releases or updates
+const char *_configfile = "/config.json";       //Configuration file
+String version = "1.1.0";        // Version number for checking if there are new code releases or updates
 
 ESP8266WebServer server(80);              // TCP server at port 80 will respond to HTTP requests
 WebSocketsServer webSocket = WebSocketsServer(81);  // WebSockets will respond on port 81
@@ -67,6 +75,10 @@ int motorPin8 = D8;
 Stepper_28BYJ_48 stepper1(motorPin1, motorPin2, motorPin3, motorPin4);
 Stepper_28BYJ_48 stepper2(motorPin5, motorPin6, motorPin7, motorPin8);
 
+bool useDHTsensor=true; //Set to true if you connected a DHT
+int dhtPin = 3;  //If you connect the DHT to RX pin you will not have serial monitor.
+DHT dht(dhtPin, DHTTYPE); //DHT sensor
+
 bool useBME280Sensor=false;   //Set to true if you connected a BME280
 BME280I2C bme;   //BME280 sensor
 int bme280SDAPin = 1;  //If you connect the BME to TX and RX pins you will not have serial monitor.
@@ -77,6 +89,7 @@ bool send_temperature = false;
 String temperature;  //Stores the temperature
 long target_time = 0L;   //variable to be able to update the temperature and humidity    
 const unsigned long  PERIOD = 2*60*1000UL; //update temp and humidity each period
+unsigned long previousMillis = 0; //variable to try a wifi reconnect
 
 void(* resetFunc) (void) = 0; //declare reset function @ address 0
 
@@ -133,9 +146,11 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
         Serial.println("Setting MQTT password to : " + msg);
         msg.toCharArray(mqtt_pwd, 20);
         
+      }else if(motor=="12"){
+        Serial.println("Setting DHT to : " + msg);
+        useDHTsensor=(msg == "true");
       }
       
-
       break;
   }
 }

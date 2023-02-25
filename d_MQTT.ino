@@ -104,11 +104,9 @@ void CoverConfig(String config_name_string, String cover_letter){
       configString += "\"cmd_t\":\"~/in\", ";
       configString += "\"set_pos_t\":\"~/in\", ";
       configString += "\"pos_t\":\"~/out\", ";
-      configString += "\"json_attr_t\":\"~/out\", ";
-      configString += "\"json_attr_tpl\":\"{{value_json.position|tojson}}\", ";
       configString += "\"pl_open\":\"0\", ";
       configString += "\"pl_cls\":\"100\", ";
-      configString += "\"val_tpl\":\"{{value_json.position}}\"";
+      configString += "\"pos_tpl\":\"{{value_json.position}}\"";
       configString += "}";
 
       //home assistant cover config page
@@ -168,7 +166,6 @@ void ConnectivityConfig(String config_name_string){
       configString += DeviceConfig(config_name_string);
       configString += "\"~\":\"homeassistant/binary_sensor/connectivity/" + config_name_string + "\", ";
       configString += "\"stat_t\":\"~/out\", ";
-      //configString += "\"val_tpl\":\"{{value_json.value}}\"";
       configString += "\"pl_on\":\"online\", ";
       configString += "\"pl_off\":\"offline\"";
       configString += "}";

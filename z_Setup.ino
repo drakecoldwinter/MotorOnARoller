@@ -1,7 +1,7 @@
 void setup()
 {    
   Serial.begin(115200);
-  delay(100);
+  while (!Serial) continue;
   Serial.print(F("Starting now\n"));
 
   StartWifi();
@@ -14,7 +14,7 @@ void setup()
   
   StartMQTT();
 
-  InitializeBME280();
+  InitializeTemperatureSensor();
  
   StartWebPage();
 
@@ -70,6 +70,7 @@ void StartWebPage(){
   INDEX_HTML.replace("{NAME}", String(config_name));
   INDEX_HTML.replace("{controlDualBlinds}", String(controlDualBlinds));
   INDEX_HTML.replace("{useBME280Sensor}", String(useBME280Sensor));
+  INDEX_HTML.replace("{useDHTsensor}", String(useDHTsensor));
   INDEX_HTML.replace("{clockwise1}", String(ccw1));
   INDEX_HTML.replace("{clockwise2}", String(ccw2));
   INDEX_HTML.replace("{config_name}", String(config_name));
@@ -83,10 +84,10 @@ void StartWebPage(){
   server.on("/reset", handleResetSettings);
   server.on("/saveReboot", handleSaveReboot);
   
-  if(useBME280Sensor && send_temperature){
+  if((useBME280Sensor || useDHTsensor) && send_temperature){
     server.on("/readTemp", handleTemp);
   }
-  if(useBME280Sensor && send_humidity){
+  if((useBME280Sensor || useDHTsensor) && send_humidity){
     server.on("/readHum", handleHum);
   }
   server.onNotFound(handleNotFound);
@@ -96,11 +97,13 @@ void StartWebPage(){
 
 //Loads configuration file
 void LoadConfiguration(){
+   
+    //Load config upon start
     if (!SPIFFS.begin()) {
-      Serial.println(F("Failed to mount file system"));
+      Serial.println("Failed to mount file system");
       return;
     }
-  
+   
     if (!loadConfig()) {
       Serial.println(F("Unable to load saved data"));
       maxPosition1 = 100000;

@@ -1,7 +1,6 @@
 
 void loop()
-{
-
+{  
   //MQTT client
   if (mqtt_active)
         MqttReconnect();
@@ -18,7 +17,7 @@ void loop()
   //OTA client code
   ArduinoOTA.handle();
           
-  CheckBME280();
+  CheckTemperature();
   
   RunMotors();
   
@@ -27,13 +26,20 @@ void loop()
 
 
 //if the period is over, then update the humidity and temperature
-void CheckBME280(){
-  if (useBME280Sensor && (millis () - target_time >= PERIOD))
+void CheckTemperature(){
+  if (useBME280Sensor && (millis() - target_time >= PERIOD))
   {
         target_time += PERIOD ;   // change scheduled time exactly, no slippage will happen
         
         //Sends the BME280 data to MQTT
-        SendTemperatureAndHumidity();
+        SendBME280TemperatureAndHumidity();
+  }
+  if(useDHTsensor && (millis() - target_time >= PERIOD))
+  {
+    target_time += PERIOD ;   // change scheduled time exactly, no slippage will happen
+
+    //Sends the DHT data to MQTT
+    SendDHTTemperatureAndHumidity();
   }
 }
 

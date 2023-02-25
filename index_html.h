@@ -13,12 +13,13 @@ String INDEX_HTML = R"(<!DOCTYPE html>
   var cversion = '{VERSION}';
   var controlDualBlinds = '{controlDualBlinds}';
   var useBME280Sensor = '{useBME280Sensor}';
+  var useDHTsensor = '{useDHTsensor}';
   var ccw1 = '{clockwise1}';
   var ccw2 = '{clockwise2}';
   var wsUri = 'ws://'+location.host+':81/';
   var repo = 'https://github.com/drakecoldwinter/MotorOnARoller';
 
-if(useBME280Sensor==true){
+if(useBME280Sensor==true || useDHTsensor==true){
   setInterval(function() {
     // Call a function repetatively with 1 Second interval
     getTempData();
@@ -32,7 +33,7 @@ function getTempData() {
     if (this.readyState == 4 && this.status == 200) {
       document.getElementById('temperature').innerHTML = this.responseText + ' C';
       if(this.responseText != ''){
-        $('#bme280').show();
+        $('#tempdiv').show();
       }     
     }
   };
@@ -46,7 +47,7 @@ function getHumData() {
     if (this.readyState == 4 && this.status == 200) {
       document.getElementById('humidity').innerHTML = this.responseText + ' %';
       if(this.responseText != ''){
-        $('#bme280').show();
+        $('#tempdiv').show();
       }     
     }
   };
@@ -111,6 +112,10 @@ function getHumData() {
         $('.coverB').show();
         $('.coverA').show();
         $('#dualCoverCheckBox').prop("checked", true);
+      }
+
+      if(useDHTsensor==true){
+        $('#DHTCheckBox').prop("checked", true);
       }
 
       if(useBME280Sensor==true){
@@ -195,6 +200,7 @@ function getHumData() {
   function SaveAndReboot(){
     doSend($('#dualCoverCheckBox').is(':checked'), '05');
     doSend($('#BME280CheckBox').is(':checked'), '06');
+    doSend($('#DHTCheckBox').is(':checked'), '12');
     doSend($('#deviceName').val(), '07');
     doSend($('#MQTTserver').val(), '08');
     doSend($('#MQTTport').val(), '09');
@@ -248,7 +254,7 @@ function getHumData() {
       <div class='center'>
         {NAME}
       </div>
-      <div class='right' id='bme280' style='display:none'>
+      <div class='right' id='tempdiv' style='display:none'>
         <ons-icon icon='fa-thermometer-half' >&nbsp;</ons-icon><span id='temperature'>0 C</span>&nbsp;&nbsp;
         <ons-icon icon='fa-tint' ></ons-icon>&nbsp;<span id='humidity'>0 %</span>&nbsp;&nbsp;
       </div>
@@ -386,7 +392,8 @@ function getHumData() {
       MQTT username <input type='textbox' id='MQTTusername' value='{mqtt_uid}'><br />
       MQTT password <input type='textbox' id='MQTTpassword' value='{mqtt_pwd}'><br />
       <input type='checkbox' id='dualCoverCheckBox' /> Use dual covers <br />
-      <input type='checkbox' id='BME280CheckBox' /> Use BME280 or BMP280 <br />
+      <input type='checkbox' id='BME280CheckBox' /> Use BME280 or BMP280 sensor<br />
+      <input type='checkbox' id='DHTCheckBox' /> Use DHT sensor<br />
 
       <br />
       <ons-button onclick='SaveAndReboot()'>Save and Reboot</ons-button>

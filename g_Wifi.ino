@@ -1,4 +1,5 @@
 
+
 //Configures and starts Wifi
 void StartWifi(){
   //Set the WIFI hostname
@@ -17,6 +18,19 @@ void StartWifi(){
     WiFi.mode(WIFI_STA);
     Serial.print("Connect to http://" + String(config_name) + ".local or http://");
     Serial.println(WiFi.localIP());
+  }
+}
+
+
+//Tryes to reconnect the wifi after a long delay
+void ReconnectWifi(){  
+  unsigned long currentMillis = millis();
+  // if WiFi is down, try reconnecting
+  if ((WiFi.status() != WL_CONNECTED) && (currentMillis - previousMillis >=(PERIOD*3))) {
+    Serial.println("Reconnecting to WiFi...");
+    WiFi.disconnect();
+    WiFi.reconnect();
+    previousMillis = currentMillis;
   }
 }
 
