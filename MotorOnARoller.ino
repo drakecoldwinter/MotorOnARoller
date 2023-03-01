@@ -75,7 +75,7 @@ int motorPin8 = D8;
 Stepper_28BYJ_48 stepper1(motorPin1, motorPin2, motorPin3, motorPin4);
 Stepper_28BYJ_48 stepper2(motorPin5, motorPin6, motorPin7, motorPin8);
 
-bool useDHTsensor=true; //Set to true if you connected a DHT
+bool useDHTsensor=false; //Set to true if you connected a DHT
 int dhtPin = 3;  //If you connect the DHT to RX pin you will not have serial monitor.
 DHT dht(dhtPin, DHTTYPE); //DHT sensor
 
