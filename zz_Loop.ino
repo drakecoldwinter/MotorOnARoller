@@ -1,26 +1,31 @@
 
 void loop()
 {  
+  //while running the motor we disable some features
+  if (motor1Running==false){
+    
+     //Webpage server
+     server.handleClient();
+    
+    //Keep Bonjour alive
+    MDNS.update();
+  
+    //OTA client code
+    ArduinoOTA.handle();
+
+    //temperature sensors      
+    CheckTemperature();
+  }
+    
   //MQTT client
   if (mqtt_active)
-        MqttReconnect();
-        
- //Websocket listner
+     MqttReconnect();
+
+  //Websocket listner
   webSocket.loop();
     
-  //Webpage server
-  server.handleClient();
-
-  //Keep Bonjour alive
-  MDNS.update();
-  
-  //OTA client code
-  ArduinoOTA.handle();
-          
-  CheckTemperature();
-  
   RunMotors();
-  
+
   Save();
 }
 
